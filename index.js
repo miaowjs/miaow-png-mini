@@ -8,6 +8,13 @@ var pkg = require('./package.json');
 
 function minify(option, cb) {
 
+  // 如果有缓存就用缓存内容
+  var cachedContents = this.getCachedContentsSync();
+  if (cachedContents) {
+    this.destContents = cachedContents;
+    return cb();
+  }
+
   if (!isPng(this.contents)) {
     return cb();
   }

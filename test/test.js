@@ -1,5 +1,5 @@
 var assert = require('assert');
-var fs = require('fs');
+var fs = require('fs-extra');
 var miaow = require('miaow');
 var path = require('path');
 
@@ -9,10 +9,13 @@ describe('miaow-png-mini', function () {
 
   var log;
 
-  before(function (done) {
+  var cwd = path.resolve(__dirname, './fixtures');
+  var output = path.resolve(__dirname, './output');
+
+  function doCompile(cb) {
     miaow.compile({
-      cwd: path.resolve(__dirname, './fixtures'),
-      output: path.resolve(__dirname, './output'),
+      cwd: cwd,
+      output: output,
       pack: false,
       module: {
         tasks: [
@@ -20,7 +23,10 @@ describe('miaow-png-mini', function () {
             test: /\.png$/,
             plugins: [{
               plugin: parse,
-              option: {quality: '65-80', speed: 4}
+              option: {
+                plugin: parse,
+                option: {quality: '65-80', speed: 4}
+              }
             }]
           }
         ]
@@ -30,9 +36,15 @@ describe('miaow-png-mini', function () {
         console.error(err.toString());
         throw err;
       }
-      log = JSON.parse(fs.readFileSync(path.resolve(__dirname, './output/miaow.log.json')));
-      done();
+
+      log = JSON.parse(fs.readFileSync(path.join(output, 'miaow.log.json')));
+      cb();
     });
+  }
+
+  before(function (done) {
+    fs.emptyDirSync(output);
+    doCompile(done);
   });
 
   it('接口是否存在', function () {
@@ -40,6 +52,17 @@ describe('miaow-png-mini', function () {
   });
 
   it('压缩', function () {
-    assert.equal(log.modules['bar.png'].hash, '3aa1fa5a41f44e4e9f5f8550fc703855');
+    var stat = fs.statSync(path.join(output, 'bar.png'));
+    assert.equal(stat.size, 1027);
+  });
+
+  it('缓存', function (done) {
+    var filePath = path.join(output, 'bar.png');
+    fs.writeFileSync(filePath, '/* load cache */');
+
+    doCompile(function () {
+      assert.equal(fs.readFileSync(filePath, {encoding: 'utf8'}), '/* load cache */');
+      done();
+    });
   });
 });

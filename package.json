@@ -1,7 +1,7 @@
 {
   "name": "miaow-png-mini",
   "description": "Miaow的PNG压缩工具",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "repository": "miaowjs/miaow-png-mini",
   "author": {
     "name": "anhulife",
@@ -21,7 +21,8 @@
     "miaow-util": "~0.1.0"
   },
   "devDependencies": {
-    "miaow": "^1.1.0",
+    "fs-extra": "^0.20.1",
+    "miaow": "^1.4.0",
     "mocha": "^2.2.4"
   },
   "scripts": {
