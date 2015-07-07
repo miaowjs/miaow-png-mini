@@ -17,11 +17,13 @@ npm install miaow-png-mini --save-dev
 module: {
   tasks: [
     {
-      test: /\.js$/,
+      test: /\.png$/,
       plugins: ['miaow-png-mini']
     }
   ]
 }
 ```
+
+### 参数说明
 
 * 传递的所有参数都是压缩配置, 具体可以参考[pngquant-bin的说明](https://www.npmjs.com/package/pngquant-bin)
