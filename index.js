@@ -61,16 +61,12 @@ function minify(option, cb) {
   });
 
   cp.on('error', function (err) {
-    return cb(new mutil.PluginError(pkg.name, err, {
-      fileName: this.srcPath
-    }));
+    return cb(err);
   }.bind(this));
 
   cp.on('close', function () {
     if (err) {
-      return cb(new mutil.PluginError(pkg.name, err, {
-        fileName: this.srcPath
-      }));
+      return cb(err);
     }
 
     if (len < this.contents.length) {
