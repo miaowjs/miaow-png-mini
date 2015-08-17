@@ -11,12 +11,15 @@ describe('miaow-png-mini', function () {
 
   var cwd = path.resolve(__dirname, './fixtures');
   var output = path.resolve(__dirname, './output');
+  var cache = path.resolve(__dirname, './cache');
+
+  fs.removeSync(cache);
 
   function doCompile(cb) {
     miaow.compile({
       cwd: cwd,
       output: output,
-      pack: false,
+      cache: cache,
       module: {
         tasks: [
           {
@@ -57,7 +60,8 @@ describe('miaow-png-mini', function () {
   });
 
   it('缓存', function (done) {
-    var filePath = path.join(output, 'bar.png');
+    var cacheInfo = JSON.parse(fs.readFileSync(path.join(cache, 'miaow.cache.json')));
+    var filePath = path.join(cache, cacheInfo['bar.png'][0].file);
     fs.writeFileSync(filePath, '/* load cache */');
 
     doCompile(function () {

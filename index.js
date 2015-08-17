@@ -6,12 +6,13 @@ var spawn = require('child_process').spawn;
 
 var pkg = require('./package.json');
 
-function minify(option, cb) {
+var minify = mutil.plugin(pkg.name, pkg.version, function (option, cb) {
 
   // 如果有缓存就用缓存内容
-  var cachedContents = this.getCachedContentsSync();
+  var hash = mutil.hash(this.contents);
+  var cachedContents = this.getCache(minify.toString(), hash);
   if (cachedContents) {
-    this.destContents = cachedContents;
+    this.contents = cachedContents;
     return cb();
   }
 
@@ -71,6 +72,8 @@ function minify(option, cb) {
 
     if (len < this.contents.length) {
       this.contents = Buffer.concat(ret, len);
+      // 缓存压缩结果
+      this.addCache(minify.toString(), hash, this.contents);
     }
 
     cb();
@@ -83,6 +86,6 @@ function minify(option, cb) {
   });
 
   cp.stdin.end(this.contents);
-}
+});
 
-module.exports = mutil.plugin(pkg.name, pkg.version, minify);
+module.exports = minify;
