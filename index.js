@@ -1,6 +1,6 @@
 // 参考 https://github.com/imagemin/imagemin-pngquant/blob/master/index.js
 var isPng = require('is-png');
-var pngquant = require('pngquant-bin');
+var pngquant = require('pngquant-bin-gfw');
 var mutil = require('miaow-util');
 var spawn = require('child_process').spawn;
 
