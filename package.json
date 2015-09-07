@@ -17,7 +17,6 @@
   ],
   "dependencies": {
     "is-png": "~1.0.0",
-    "pngquant-bin-gfw": "~0.0.1",
     "miaow-util": "~0.6.1"
   },
   "devDependencies": {
