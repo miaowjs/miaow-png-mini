@@ -16,7 +16,7 @@
     "png"
   ],
   "dependencies": {
-    "is-png": "~1.0.0"
+    "is-png": "1.0.0"
   },
   "devDependencies": {
     "miaow": "^5.0.0",
